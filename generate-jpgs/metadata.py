@@ -14,7 +14,7 @@ warnings.simplefilter(action='ignore', category=FutureWarning)
 
 
 # Base metadata. MUST BE EDITED.
-BASE_IMAGE_URL = "ipfs://QmUY5do5V4HoJskL662fQgEFdrY5zwd1eRRvzVbtjZ8xWZ"
+BASE_IMAGE_URL = "ipfs://Qmd14zS1T6v3UkzFwKz1ag518Pi29L23WrpAnMDZ8epDdt"
 BASE_NAME = "Bootleg Bot #"
 
 BASE_JSON = {

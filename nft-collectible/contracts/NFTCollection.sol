@@ -12,7 +12,7 @@ contract NFTCollectible is ERC721Enumerable, Ownable {
 
     Counters.Counter private _tokenIds;
 
-    uint public constant MAX_SUPPLY = 100;
+    uint public constant MAX_SUPPLY = 50;
     uint public constant PRICE = 0.01 ether;
     uint public constant MAX_PER_MINT = 5;
 

@@ -1,35 +1,36 @@
 const { utils } = require("ethers");
 
 async function main() {
-    const baseTokenURI = 'ipfs://QmbXupjn1eyUynGsNF4HHj55PdzzxEjbqaoyDfvLBQSA6X/';
+    const baseTokenURI = "ipfs://Qmao4MoDKjzsRLdvwQqbLT8Wj6WDizFM2z9RMVdjj1U6f7/";
 
-    // get owner/deployer's wallet address
+    // Get owner/deployer's wallet address
     const [owner] = await hre.ethers.getSigners();
 
-    // get contract to be deployed
-    const contractFactory = await hre.ethers.getContractFactory('NFTCollectible');
+    // Get contract that we want to deploy
+    const contractFactory = await hre.ethers.getContractFactory("NFTCollectible");
 
-    // deploy contract
+    // Deploy contract with the correct constructor arguments
     const contract = await contractFactory.deploy(baseTokenURI);
 
-    // wait for transaction to be mined
-    await contract.deployed()
+    // Wait for this transaction to be mined
+    await contract.deployed();
 
-    // get contract address
-    console.log('contract deployed to:', contract.address);
+    // Get contract address
+    console.log("Contract deployed to:", contract.address);
 
-    // reserve NFTs
+    // Reserve NFTs
     let txn = await contract.reserveNFTs();
     await txn.wait();
     console.log("10 NFTs have been reserved");
 
-    // mint 3 NFTs by sending ether
-    txn = await contract.mintNFTs(3, { value: utils.parseEther('0.03')});
+    // Mint 3 NFTs by sending 0.03 ether
+    txn = await contract.mintNFTs(3, { value: utils.parseEther('0.03') });
     await txn.wait()
 
-    // get all token IDs of the owner
+    // Get all token IDs of the owner
     let tokens = await contract.tokensOfOwner(owner.address)
-    console.log("owner has tokens: ", tokens);
+    console.log("Owner has tokens: ", tokens);
+
 }
 
 main()
