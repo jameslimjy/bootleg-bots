@@ -11,3 +11,8 @@ Assets and metadata hosted on IPFS:
 - metadata CID: Qmao4MoDKjzsRLdvwQqbLT8Wj6WDizFM2z9RMVdjj1U6f7
 
 *assets might take awhile to load up!*
+
+### Frontend
+<p>
+    <img width="600" alt="img1" src="https://user-images.githubusercontent.com/56946413/179383985-9effbbb9-7699-4bbb-bdbc-88514f71e3ce.png">
+</p>
