@@ -9,6 +9,8 @@ const abi = contract.abi;
 function App() {
 
   const [currentAccount, setCurrentAccount] = useState(null);
+  const [chain, setChain] = useState(null);
+  const [currentStatus, setCurrentStatus] = useState(null);
   
   const checkWalletIsConnected = async () => {
     const { ethereum } = window;
@@ -26,16 +28,35 @@ function App() {
       const account = accounts[0];
       console.log("Found an account, address: ", account);
       setCurrentAccount(account);
+      setCurrentStatus("Wallet connected, ready to proceed :)");
     } else {
       console.log("No account found")
     }
    }
+
+  const checkNetwork = async () => {
+    const { ethereum } = window;
+
+    if (!ethereum) {
+      alert("Need to install Metamask!");
+    } else {
+      try {
+        const provider =  new ethers.providers.Web3Provider(ethereum);
+        const chainId = await provider.getNetwork();
+        console.log(`chain connected: ${chainId.name}`);
+        setChain(chainId.name);
+      } catch (err) {
+        console.log(err)
+      }
+    }
+  }
 
   const connectWalletHandler = async () => { 
     const { ethereum } = window;
 
     if (!ethereum) {
       alert("Need to install Metamask!");
+      return;
     }
 
     try {
@@ -51,18 +72,23 @@ function App() {
     try {
       const { ethereum } = window;
 
+      if (chain !== "rinkeby") {
+        alert("Need to change to rinkeby network before proceeding");
+
+      }
+
       if (ethereum) {
         const provider = new ethers.providers.Web3Provider(ethereum);
         const signer = provider.getSigner();
         const nftContract = new ethers.Contract(contractAddress, abi, signer);
 
-        console.log("Initialize payment");
+        setCurrentStatus("Initalizing payment...");
         let nftTxn = await nftContract.mintNFTs(1, { value: ethers.utils.parseEther("0.01") });
 
-        console.log("Mining... pls wait");
+        setCurrentStatus("Mining in progress...");
         await nftTxn.wait();
 
-        console.log(`Mined, see transaction: https://rinkeby.etherscan.io/tx/${nftTxn.hash}`);
+        setCurrentStatus(`Mined! see transaction: https://rinkeby.etherscan.io/tx/${nftTxn.hash}`);
       
       } else {
         console.log("Ethereum object does not exist");
@@ -89,15 +115,22 @@ function App() {
     )
   }
 
+
   useEffect(() => {
     checkWalletIsConnected();
+    checkNetwork();
   }, [])
 
     return (
         <div className='main-app'>
+          <img src={'../banner-pict.jpg'} alt="banner-pict"></img>
           <h1>Bootleg Bots</h1>
           <div>
             {currentAccount ? mintNftButton() : connectWalletButton()}
+          </div>
+          <div>
+            <h2>Current chain: {chain}</h2>
+            <h3>Current status: {currentStatus}</h3>
           </div>
         </div>
     )
